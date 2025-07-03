@@ -3,7 +3,7 @@
    
    # Use an official Python runtime as a parent image
     # We use a slim-buster image for a smaller footprint
-    FROM python:3.9-slim-buster
+    FROM python:3.11-slim-bookworm
 
     # Set the working directory in the container
     WORKDIR /app
@@ -31,4 +31,8 @@
     # We bind to 0.0.0.0:8080 as required by Cloud Run.
     # The 'backend_app:app' refers to 'app' object in 'backend_app.py'
     CMD ["gunicorn", "--bind", "0.0.0.0:8080", "backend_app:app"]
+    
+
+
+
     

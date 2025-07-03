@@ -25,7 +25,14 @@ GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini
 
 app = Flask(__name__)
 # Configure CORS to allow requests from your React app (running on default port 3000)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/api/*": {"origins": [
+    "http://localhost:3000",
+    "https://chic-swan-6ce514.netlify.app" # Your deployed Netlify frontend URL
+]}})
+
+
+
+#CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 def call_gemini_for_ideas(niche, successful_content_types, platform_type):
     """
@@ -113,8 +120,8 @@ def generate_ideas_endpoint():
         return jsonify({"ideas": ideas})
 
 if __name__ == '__main__':
-    print("Starting Flask backend on http://127.0.0.1:5000")
+    # Cloud Run provides the PORT environment variable
+    port = int(os.getenv('PORT', 8080)) # Default to 8080 if PORT not set (for local testing)
+    print(f"Starting Flask backend on 0.0.0.0:{port}")
     print("Ensure your Gemini API Key is set in a .env file or environment variable.")
-    # Set use_reloader=False if you want to explicitly control reloading,
-    # but debug=True implies reloading, and it's generally fine for dev.
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host='0.0.0.0', port=port) # <--- UPDATED LINE
